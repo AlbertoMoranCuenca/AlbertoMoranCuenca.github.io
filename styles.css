@@ -348,7 +348,7 @@ footer .social-logos svg:hover{
 
     .about-me .wrapper {
         display: grid;
-        grid-template-rows: 1fr 2fr;
+        grid-template-rows: 1fr auto;
         grid-template-columns: auto;
     }
 
