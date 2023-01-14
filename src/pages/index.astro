@@ -1,0 +1,27 @@
+---
+import About from "../components/About.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import MobileHeader from "../components/MobileHeader.astro";
+import Presentation from "../components/Presentation.astro";
+import Projects from "../components/Projects.astro";
+---
+<html lang="en" class="scroll-smooth scrollbar scrollbar-thumb-amber-600 scrollbar-track-slate-900 scrollbar-medium">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Alberto Moran | Software engineer</title>
+	</head>
+	<body class="box-border">
+		<Header />
+		<MobileHeader />
+		<main class="grid min-h-screen auto-rows-[minmax(100vh,max-content)] overflow-x-hidden">
+			<Presentation />
+			<About />
+			<Projects />
+		</main>
+		<Footer />
+	</body>
+</html>
