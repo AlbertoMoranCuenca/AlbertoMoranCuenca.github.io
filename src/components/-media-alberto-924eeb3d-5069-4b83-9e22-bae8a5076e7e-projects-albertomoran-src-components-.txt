@@ -1,0 +1,1 @@
+/media/alberto/924eeb3d-5069-4b83-9e22-bae8a5076e7e/projects/albertomoran/src/components/Projects.astro
