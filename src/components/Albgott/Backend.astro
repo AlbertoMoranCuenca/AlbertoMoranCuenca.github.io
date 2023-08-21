@@ -1,0 +1,25 @@
+---
+import Tag from "./Tag.astro";
+
+---
+
+<div class="collapse collapse-arrow bg-amber-500">
+  <input type="radio" name="my-accordion" />
+  <div class="collapse-title text-xl font-black text-left flex flex-col items-center text-slate-800 gap-1">
+    BACKEND
+    <div class="flex gap-x-2 flex-wrap gap-y-2  justify-center">
+      <Tag color="bg-gray-800">API REST</Tag>
+      <Tag color="bg-gray-500">microservices</Tag>
+      <Tag color="bg-amber-600">java</Tag>
+      <Tag color="bg-lime-600">springboot</Tag>
+      <Tag color="bg-fuchsia-900">event-driven</Tag>
+      <Tag color="bg-orange-600">rabbitmq</Tag>
+      <Tag color="bg-cyan-900">CQRS</Tag>
+      <Tag color="bg-violet-900">aws</Tag>
+      <Tag color="bg-rose-700">flyway</Tag>
+    </div>
+  </div>
+  <div class="collapse-content  flex flex-col gap-3 mt-1 text-slate-800 md:px-14">
+    <p>DESARROLLAR</p>
+  </div>
+</div>

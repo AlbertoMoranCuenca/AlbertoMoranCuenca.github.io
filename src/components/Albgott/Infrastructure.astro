@@ -1,0 +1,42 @@
+---
+import Tag from "./Tag.astro";
+
+---
+
+<div class="collapse collapse-arrow bg-amber-500">
+  <input type="radio" name="my-accordion"/>
+  <div class="collapse-title text-xl font-black text-left flex flex-col items-center text-slate-800 gap-1">
+    INFRASTRUCTURE
+    <div class="flex gap-x-2 flex-wrap gap-y-2  justify-center">
+      <Tag color="bg-green-800">nginx</Tag>
+      <Tag color="bg-gray-500">microservices</Tag>
+    </div>
+  </div>
+  <div class="collapse-content  flex flex-col gap-3 mt-1 text-slate-800 md:px-14">
+    <img class="rounded-xl" src="/images/infrastructure-schema.jpg"/>
+    <p>In order for the entire system to work, various artifacts are required, some of them working within our domain and others are delegated to third parties.</p>
+    <h2 class="text-left font-bold text-lg md:text-2xl">Outside our system</h2>
+    <ul class="text-left">
+      <li>- Github as code repository for working from anywhere.</li>
+      <li>- Dockerhub as container repository for storing microservices as containers.</li>
+      <li>- AWS S3 as file system for our microservices.</li>
+      <li>- AWS RDS as relational database for our microservices.</li>
+      <li>- Rabbitmq as a messaging queue for our microservices.</li>
+    </ul>
+    <h2 class="text-left font-bold text-lg md:text-2xl">Inside our system</h2>
+    <p class="text-left">Inside our domain we run all components inside a Nginx server. This components are:</p>
+    <ul class="text-left">
+      <li>- Jenkins container in order to update and test currents apps when new code is pushed inside github repositories.</li>
+      <li>- Docker-compose to run all the needed apps at the same time.</li>
+      <li>- Spring boot applications for backend microservices.</li>
+      <li>- React applications for front end applications.</li>
+    </ul>
+
+    <h2 class="text-left font-bold text-lg md:text-2xl">Why not a full distributed infrastructure</h2>
+    <p class="text-left">The main reasons for not moving to a complete distribute architecture are:</p>
+    <ul class="text-left">
+      <li>- Complexity: Implementing and managing a distributed infrastructure requires a higher level of complexity compared to a centralized infrastructure. It involves setting up and configuring multiple servers, ensuring synchronization and consistency across the nodes, and handling network communication between them. This complexity can add overhead to the development and maintenance processes.</li>
+      <li>- Cost: Distributed infrastructures typically involve additional hardware, networking, and maintenance costs. Acquiring and managing multiple servers, ensuring redundancy, and maintaining network connectivity can be more expensive than a single centralized server.</li>
+    </ul>
+  </div>
+</div>
