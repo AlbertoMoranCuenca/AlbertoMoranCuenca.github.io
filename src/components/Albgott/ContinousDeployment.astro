@@ -14,15 +14,15 @@ import Tag from "./Tag.astro";
       <Tag color="bg-yellow-800">jenkins</Tag>
     </div>
   </div>
-  <div class="collapse-content flex flex-col gap-3 text-slate-800 text-left font-semibold text-base md:text-xl p-4 md:px-14">
+  <div class="collapse-content flex flex-col gap-3 text-slate-800 text-left font-light text-base md:text-xl p-4 md:px-14">
     <img class="rounded-xl" src="/images/continous-deployment-schema.jpg"/>
     <ol class="flex flex-col gap-4">
-      <li>1. A developer push code to production branch inside github.</li>
-      <li>2. Github inform jenkins, throught a webhook, that code base have been updated.</li>
-      <li>3. Jenkins dowload the repository that have just been updated.</li>
-      <li>4. Jenkins run app's Jenkinsfile.</li>
-      <li>5. Jenkins build and push the dockerized app to docker hub.</li>
-      <li>6. Nginx pull and restart the container of the app that was just updated</li>
+      <li><span class="font-bold">1.</span> A developer push code to production branch inside github.</li>
+      <li><span class="font-bold">2.</span> Github inform jenkins, throught a webhook, that code base have been updated.</li>
+      <li><span class="font-bold">3.</span> Jenkins dowload the repository that have just been updated.</li>
+      <li><span class="font-bold">4.</span> Jenkins run app's Jenkinsfile.</li>
+      <li><span class="font-bold">5.</span> Jenkins build and push the dockerized app to docker hub.</li>
+      <li><span class="font-bold">6.</span> Nginx pull and restart the container of the app that was just updated</li>
     </ol>
   </div>
 </div>
