@@ -1,0 +1,30 @@
+---
+import HeaderComponent from "@components/HeaderComponent.astro";
+
+
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Alberto Moran | Software engineer</title>
+		<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+		<link rel="manifest" href="/favicon/site.webmanifest">
+		<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#102053">
+		<meta name="apple-mobile-web-app-title" content="Alberto Moran | Software engineer">
+		<meta name="application-name" content="Alberto Moran | Software engineer">
+		<meta name="msapplication-TileColor" content="#102053">
+		<meta name="theme-color" content="#ffffff">
+	</head>
+	<body >
+		<main class="min-h-screen content-border w-screen flex justify-center items-center font-sans bg-[url('/image/background.jpg')] backdrop-blur-sm backdrop-brightness-50 backdrop-saturate-200 relative">
+			<slot />
+			<HeaderComponent />
+		</main>
+	</body>
+</html>

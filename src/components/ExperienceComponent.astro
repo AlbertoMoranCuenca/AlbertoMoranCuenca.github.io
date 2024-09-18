@@ -1,0 +1,14 @@
+---
+const {role, icon, business, date} = Astro.props
+---
+<div class="text-sm md:text-lg text-white font-bold flex flex-col text-center items-center md:flex-row md:items-start gap-8 md:text-start">
+  <div class="flex  flex-col place-items-center gap-1">
+    <img class="w-14 bg-white p-1" src={icon} alt={business}/>
+    <span class="font-normal uppercase text-xs">{business}</span>
+    <span>{role}</span>
+    <span class="font-light uppercase text-xs -mt-2">{date}</span>
+  </div>
+  <ul class="text-xs list-none md:list-disc font-light uppercase -mt-1.5 flex flex-col gap-2">
+    <slot />
+  </ul>
+</div>

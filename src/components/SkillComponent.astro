@@ -1,0 +1,7 @@
+---
+const {name, icon,subName} = Astro.props
+---
+<div class="text-lg text-white font-bold flex flex-col gap-2 items-center ">
+  <img class="w-11" src={icon} alt={name}/>
+  <span class="text-center">{name}</span>
+</div>

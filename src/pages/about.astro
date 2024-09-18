@@ -1,0 +1,101 @@
+---
+import A from "@components/A.astro";
+import ExperienceComponent from "@components/ExperiencesComponent.astro";
+import LanguagesComponent from "@components/LanguagesComponent.astro";
+import NeonLineComponent from "@components/NeonLineComponent.astro";
+import ProfileComponent from "@components/ProfileComponent.astro";
+import SkillsComponent from "@components/SkillsComponent.astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import WebLayout from "@layouts/WebLayout.astro";
+
+
+---
+<WebLayout>
+  <PageLayout title="About me.">
+    <div class="grid grid-cols-1 grid-rows-[35px_1fr] p-7 pb-0 pt-0 overflow-hidden">
+    <nav class="sticky top-0" >
+        <ul class="flex justify-evenly text-white text-xs md:text-base ">
+          <li id="profileTab" class="cursor-pointer" data-tab="profile">
+            <A  >
+              PROFILE
+            </A>
+          </li>
+          <li id="skillsTab" class="cursor-pointer" data-tab="skills">
+            <A >
+              SKILLS
+            </A>
+          </li>
+          <li id="languagesTab" class="cursor-pointer" data-tab="languages">
+            <A  >
+              LANGUAGES
+            </A>
+          </li>
+          <li id="experienceTab" class="cursor-pointer" data-tab="experience">
+            <A >
+              EXPERIENCE
+            </A>
+          </li>
+        </ul>
+        <NeonLineComponent />
+      </nav>
+      <div class="p-8 overflow-auto mb-14">
+        <ProfileComponent />
+        <SkillsComponent />
+        <LanguagesComponent /> 
+        <ExperienceComponent />
+      </div>
+    </div>
+  </PageLayout>
+</WebLayout>
+
+<script is:inline >
+  let module = "profileTab"
+  
+  const profile = document.getElementById("profileTab")
+  const skills = document.getElementById("skillsTab")
+  const languages = document.getElementById("languagesTab")
+  const experiences = document.getElementById("experienceTab")
+
+  const profileShower = document.getElementById("profileShower")
+  const skillsShower = document.getElementById("skillsShower")
+  const languagesShower = document.getElementById("languagesShower")
+  const experiencesShower = document.getElementById("experienceShower")
+
+  function updateTabColors(){
+    profile.style.fontWeight = module ==="profileTab"? "800":"300"
+    skills.style.fontWeight = module ==="skillsTab"? "800":"300"
+    languages.style.fontWeight = module ==="languagesTab"? "800":"300"
+    experiences.style.fontWeight = module ==="experiencesTab"? "800":"300"
+  }
+
+  function updateTabs () {
+    profileShower.style.display = module ==="profileTab"? "grid":"none"
+    skillsShower.style.display = module ==="skillsTab"? "flex":"none"
+    languagesShower.style.display = module ==="languagesTab"? "grid":"none"
+    experiencesShower.style.display = module ==="experiencesTab"? "grid":"none"
+  }
+
+  function update(name) {
+    module=name
+    updateTabColors()
+    updateTabs()
+  }
+
+  profile.addEventListener("click",() => {
+    update("profileTab")
+  })
+
+  skills.addEventListener("click",() => {
+    update("skillsTab")
+  })
+
+  languages.addEventListener("click",() => {
+    update("languagesTab")
+  })
+
+  experiences.addEventListener("click",() => {
+    update("experiencesTab")
+  })
+
+  update("profileTab")
+</script>
