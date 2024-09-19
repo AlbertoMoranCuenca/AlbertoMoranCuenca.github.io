@@ -8,7 +8,7 @@ import ProjectComponent from "@components/ProjectComponent.astro";
   <PageLayout title="Projects.">
     
     <div class="overflow-scroll">
-    <div class=" gap-4 grid grid-cols-1 sm:grid-cols-2 sm:p-4 md:p-8 md:gap-8 lg:grid-cols-3">
+    <div class=" sm:gap-4 grid grid-cols-1 sm:grid-cols-2 sm:p-4 md:p-8 md:gap-8 lg:grid-cols-3">
       {
         ProjectsData.map(p => <ProjectComponent {...p} />)
       }
