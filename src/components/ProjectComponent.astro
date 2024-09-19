@@ -12,7 +12,7 @@ const { name = "", images = [], description = "", techs = {}, isPrivate = false}
     <div class=`text-xs px-3  rounded-full font-bold  border-2 ${isPrivate? "text-red-600 border-red-600" : "text-green-600 border-green-600"}` >{isPrivate? "PRIVATE" : "PUBLIC"}</div>
   </div>
 <div class="carousel carousel-end rounded-box w-full">
-  {images.map(i => <div class="carousel-item w-full"><img src={i}  /></div>)}
+  {images.map(i => <div class="carousel-item w-full"><img src={i} class="w-full" /></div>)}
 </div>
 <p class="text-white  overflow-y-scroll text-xs font-semibold">{description}</p>
 <TecnologiesScroller techs={techs}/>
