@@ -1,0 +1,54 @@
+---
+export type TechnologiesSelector =  {
+  springboot?: boolean,
+  angular?: boolean,
+  html?: boolean,
+  astro?: boolean,
+  js?: boolean,
+  ts?: boolean,
+  java?: boolean,
+  docker?: boolean,
+  postgresql?: boolean,
+  microservices?: boolean,
+  aws?: boolean,
+  css?: boolean,
+  tailwind?: boolean,
+  sass?: boolean,
+  mysql?: boolean,
+  git?: boolean,
+  nginx?: boolean,
+  rabbitmq?: boolean,
+  react?: boolean,
+  postman?: boolean,
+  jenkins?: boolean,
+}
+
+interface Props {
+  techs: TechnologiesSelector
+} 
+
+const { techs } = Astro.props 
+---
+<div class="w-full overflow-y-hidden overflow-x-scroll flex gap-3 p-3">
+  {techs.springboot && <img class="w-11" src="https://cdn.simpleicons.org/spring/6DB33F" alt="Spring Boot" />}
+  {techs.angular && <img class="w-11" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-plain.svg" alt="Angular" />}
+  {techs.html && <img class="w-11" src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" />}
+  {techs.astro && <img class="w-11" src="https://cdn.simpleicons.org/astro/FF5D016" alt="Astro" />}
+  {techs.js && <img class="w-11" src="https://skillicons.dev/icons?i=js" alt="Javascript" />}
+  {techs.ts && <img class="w-11" src="https://skillicons.dev/icons?i=ts" alt="Typescript" />}
+  {techs.java && <img class="w-11" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" />}
+  {techs.postgresql && <img class="w-11" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="Postgresql" />}
+  {techs.microservices && <img class="w-11" src="/skill/microservices.png" alt="Microservices" />}
+  {techs.aws && <img class="w-11" src="https://skillicons.dev/icons?i=aws" alt="AWS" />}
+  {techs.css && <img class="w-11" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-plain-wordmark.svg" alt="Css" />}
+  {techs.tailwind && <img class="w-11" src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="TailwindCss" />}
+  {techs.sass && <img class="w-11" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg" alt="Sass" />}
+  {techs.mysql && <img class="w-11" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" alt="MySql" />}
+  {techs.git && <img class="w-11" src="https://cdn.simpleicons.org/git/F05032" alt="Git" />}
+  {techs.nginx && <img class="w-11" src="https://cdn.simpleicons.org/nginx/009639" alt="Nginx" />}
+  {techs.docker && <img class="w-11" src="https://cdn.simpleicons.org/docker/2496ED" alt="Docker" />}
+  {techs.rabbitmq && <img class="w-11" src="https://cdn.simpleicons.org/rabbitmq/FF6600" alt="RabbitMQ" />}
+  {techs.jenkins && <img class="w-11" src="https://skillicons.dev/icons?i=jenkins" alt="Jenkins" />}
+  {techs.react && <img class="w-11" src="https://skillicons.dev/icons?i=react" alt="React" />}
+  {techs.postman && <img class="w-11" src="https://cdn.simpleicons.org/postman/FF6C37" alt="Postman" />}
+</div>

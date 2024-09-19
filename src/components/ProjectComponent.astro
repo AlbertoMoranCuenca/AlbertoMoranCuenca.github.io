@@ -1,0 +1,19 @@
+---
+import type { Project } from '@data/projects.model'
+import TecnologiesScroller from './TecnologiesScroller.astro'
+
+type Props = Project
+
+const { name = "", images = [], description = "", techs = {}, isPrivate = false} = Astro.props
+---
+<article class="px-3 h-[550px] py-3 border-1 sm:rounded-xl bg-[#141936]/90 gap-2 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f] grid grid-cols-1 grid-rows-[50px_150px_240px_60px]">
+  <div class="flex flex-col items-center gap-1">
+    <h1 class="text-base font-bold text-white uppercase text-center">{name}</h1>
+    <div class=`text-xs px-3  rounded-full font-bold  border-2 ${isPrivate? "text-red-600 border-red-600" : "text-green-600 border-green-600"}` >{isPrivate? "PRIVATE" : "PUBLIC"}</div>
+  </div>
+<div class="carousel carousel-end rounded-box w-full">
+  {images.map(i => <div class="carousel-item w-full"><img src={i}  /></div>)}
+</div>
+<p class="text-white  overflow-y-scroll text-xs font-semibold">{description}</p>
+<TecnologiesScroller techs={techs}/>
+</article>

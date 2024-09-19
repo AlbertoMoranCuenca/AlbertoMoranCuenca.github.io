@@ -1,11 +1,19 @@
 ---
 import PageLayout from "@layouts/PageLayout.astro";
 import WebLayout from "@layouts/WebLayout.astro";
-
-
+import { ProjectsData } from '@data/projects.model'
+import ProjectComponent from "@components/ProjectComponent.astro";
 ---
 <WebLayout>
   <PageLayout title="Projects.">
-
+    
+    <div class="overflow-scroll">
+    <div class=" gap-4 grid grid-cols-1 sm:grid-cols-2 sm:p-4 md:p-8 md:gap-8 lg:grid-cols-3">
+      {
+        ProjectsData.map(p => <ProjectComponent {...p} />)
+      }
+    </div>
+    <div class="h-16"></div>
+  </div>
   </PageLayout>
 </WebLayout>
