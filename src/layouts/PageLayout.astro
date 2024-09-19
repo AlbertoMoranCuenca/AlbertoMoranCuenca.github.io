@@ -4,9 +4,8 @@ import NeonLineComponent from "@components/NeonLineComponent.astro"
 const { title } = Astro.props
 ---
 <div class="w-screen h-screen p-2 sm:p-4 sm:pb-2 flex justify-center">
-  <div class="border-2 rounded-xl overflow-x-hidden overflow-y-scroll bg-[#141936]/90 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f] h-full w-full max-w-5xl grid grid-cols-1 grid-rows-[70px_5px_1fr]">
+  <div class="border-2 rounded-xl overflow-x-hidden overflow-y-scroll bg-[#141936]/90 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f] h-full w-full max-w-5xl grid grid-cols-1 grid-rows-[70px_1fr]">
     <h1 class="text-4xl font-bold text-white drop-shadow-[0_0_5px_#08f]  sticky top-0 p-5">{title}</h1>
-    <NeonLineComponent />
     <slot />
   </div>
 </div>
