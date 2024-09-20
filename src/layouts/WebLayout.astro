@@ -1,6 +1,7 @@
 ---
 import HeaderComponent from "@components/HeaderComponent.astro";
-
+import { slide } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 
 ---
 
@@ -20,11 +21,15 @@ import HeaderComponent from "@components/HeaderComponent.astro";
 		<meta name="application-name" content="Alberto Moran | Software engineer">
 		<meta name="msapplication-TileColor" content="#102053">
 		<meta name="theme-color" content="#ffffff">
+		<ClientRouter />
 	</head>
 	<body >
-		<main class="min-h-screen content-border w-screen flex justify-center items-center font-sans bg-[url('/image/background.jpg')] backdrop-blur-sm backdrop-brightness-50 backdrop-saturate-200 relative">
-			<slot />
-			<HeaderComponent />
+		<main class="min-h-screen content-border w-screen flex justify-center items-center font-sans bg-[url('/image/background.jpg')] backdrop-blur-sm backdrop-brightness-50 backdrop-saturate-200 relative" >
+			<div transition:animate="fade" >
+
+				<slot  />
+			</div>
+				<HeaderComponent />
 		</main>
 	</body>
 </html>
