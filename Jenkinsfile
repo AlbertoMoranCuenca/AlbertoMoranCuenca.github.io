@@ -11,7 +11,7 @@ pipeline {
             steps {
                 script {
                     // Almacenamos el payload del webhook en una variable
-                    GITHUB_PAYLOAD = env.GIT_COMMIT // Aquí el payload podría estar en una variable de entorno
+                    GITHUB_PAYLOAD = env // Aquí el payload podría estar en una variable de entorno
                     // Si se quiere ver el payload completo, se puede imprimir o procesar
                     echo "Evento de Push recibido: ${GITHUB_PAYLOAD}"
                 }
