@@ -1,5 +1,5 @@
 pipeline {
-    agent prod
+    agent { label 'prod' }  // Ejecuta en el nodo con la etiqueta 'prod'
 
     environment {
         // Definir una variable para capturar el payload del evento
