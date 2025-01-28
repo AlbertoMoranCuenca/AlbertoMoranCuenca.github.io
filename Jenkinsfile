@@ -49,7 +49,7 @@ pipeline {
                     }
                     """
                     httpRequest(
-                        url: '${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/create',
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/create",
                         httpMode: 'POST',
                         contentType: 'APPLICATION_JSON',
                         customHeaders: [
@@ -60,7 +60,7 @@ pipeline {
                     )
 
                     httpRequest(
-                        url: '${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/${CONTAINER_NAME}/start',
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/${CONTAINER_NAME}/start",
                         httpMode: 'POST',
                         customHeaders: [
                             [name: 'Authorization', value: 'Bearer ${PORTAINER_TOKEN}']
