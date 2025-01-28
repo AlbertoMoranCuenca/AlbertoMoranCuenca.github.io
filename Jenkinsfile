@@ -53,7 +53,7 @@ pipeline {
                         httpMode: 'POST',
                         contentType: 'APPLICATION_JSON',
                         customHeaders: [
-                            [name: 'X-API-Key', value: '${PORTAINER_TOKEN}']
+                            [name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]
                         ],
                         requestBody: deployConfig,
                         validResponseCodes: '200:201'
