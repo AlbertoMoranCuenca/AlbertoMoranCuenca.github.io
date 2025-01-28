@@ -42,7 +42,7 @@ pipeline {
                     }
                     """
                     httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/v1.41/containers/create",
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/v1.41/containers/create?name=${CONTAINER_NAME}",
                         httpMode: 'POST',
                         contentType: 'APPLICATION_JSON',
                         customHeaders: [
