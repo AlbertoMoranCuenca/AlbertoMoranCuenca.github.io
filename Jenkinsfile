@@ -2,7 +2,7 @@ pipeline {
     agent { label 'prod' }  
 
     environment {
-        PORTAINER_SERVER_URL = '${env.PORTAINER_SERVER_URL}'
+        PORTAINER_SERVER_URL = "${env.PORTAINER_SERVER_URL}"
         PORTAINER_TOKEN = credentials('PORTAINER_TOKEN')
         CONTAINER_NAME = 'albertomoran-webpage'
         IMAGE_NAME = 'albertomoran-webpage:latest'
