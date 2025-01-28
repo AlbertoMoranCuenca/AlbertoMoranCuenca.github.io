@@ -2,10 +2,11 @@ pipeline {
     agent { label 'prod' }  
 
     environment {
-        PORTAINER_SERVER_URL = "${env.PORTAINER_SERVER_URL}"
+        PORTAINER_SERVER_URL = '${env.PORTAINER_SERVER_URL}'
         PORTAINER_TOKEN = credentials('PORTAINER_TOKEN')
         CONTAINER_NAME = 'albertomoran-webpage'
         IMAGE_NAME = 'albertomoran-webpage:latest'
+        ENVIRONMENT_ID = '6'
     }
 
     stages {
@@ -22,6 +23,7 @@ pipeline {
         stage('Run Container') {
             steps {
                 script {
+                    def portainerToken = System.getenv('PORTAINER_TOKEN')
                     def deployConfig = """
                     {
                         "Name": "${CONTAINER_NAME}",
@@ -48,21 +50,21 @@ pipeline {
                     }
                     """
                     httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/containers/create?name=${CONTAINER_NAME}",
+                        url: '${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/create',
                         httpMode: 'POST',
                         contentType: 'APPLICATION_JSON',
                         customHeaders: [
-                            [name: 'Authorization', value: "Bearer ${PORTAINER_TOKEN}"]
+                            [name: 'Authorization', value: 'Bearer ${PORTAINER_TOKEN}']
                         ],
                         requestBody: deployConfig,
                         validResponseCodes: '200:201'
                     )
 
                     httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/containers/${CONTAINER_NAME}/start",
+                        url: '${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/${CONTAINER_NAME}/start',
                         httpMode: 'POST',
                         customHeaders: [
-                            [name: 'Authorization', value: "Bearer ${PORTAINER_TOKEN}"]
+                            [name: 'Authorization', value: 'Bearer ${PORTAINER_TOKEN}']
                         ],
                         validResponseCodes: '200:204'
                     )
