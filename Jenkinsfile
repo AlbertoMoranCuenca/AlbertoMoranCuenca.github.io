@@ -23,7 +23,6 @@ pipeline {
         stage('Run Container') {
             steps {
                 script {
-                    def portainerToken = System.getenv('PORTAINER_TOKEN')
                     def deployConfig = """
                     {
                         "Name": "${CONTAINER_NAME}",
