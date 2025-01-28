@@ -26,24 +26,17 @@ pipeline {
                     def deployConfig = """
                     {
                         "Name": "${CONTAINER_NAME}",
-                        "Env": [],
-                        "EndpointId": 6, 
-                        "Config": {
-                            "Image": "${IMAGE_NAME}",
-                            "RestartPolicy": {
-                                "Name": "always"
-                            },
-                            "ExposedPorts": {
-                                "80/tcp": {}
-                            },
-                            "HostConfig": {
-                                "PortBindings": {
-                                    "80/tcp": [
-                                        {
-                                            "HostPort": "80"
-                                        }
-                                    ]
-                                }
+                        "Image": "${IMAGE_NAME}",
+                        "ExposedPorts": {
+                            "80/tcp": {}
+                        },
+                        "HostConfig": {
+                            "PortBindings": {
+                                "80/tcp": [
+                                    {
+                                        "HostPort": "80"
+                                    }
+                                ]
                             }
                         }
                     }
@@ -63,7 +56,7 @@ pipeline {
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/${CONTAINER_NAME}/start",
                         httpMode: 'POST',
                         customHeaders: [
-                            [name: 'X-API-Key', value: '${PORTAINER_TOKEN}']
+                            [name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]
                         ],
                         validResponseCodes: '200:204'
                     )
