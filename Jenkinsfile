@@ -1,38 +1,73 @@
 pipeline {
-    agent { label 'prod' }  // Ejecuta en el nodo con la etiqueta 'prod'
+    agent { label 'prod' }  
 
     environment {
-        // Definir una variable para capturar el payload del evento
-        GITHUB_PAYLOAD = ''
+        PORTAINER_SERVER_URL = env.PORTAINER_SERVER_URL
+        PORTAINER_TOKEN = credentials('PORTAINER_TOKEN')
+        CONTAINER_NAME = 'albertomoran-webpage'
+        IMAGE_NAME = 'albertomoran-webpage:latest'
     }
 
     stages {
-        stage('Capture Push Event') {
+        stage('Build docker image'){
             steps {
                 script {
-                    // Almacenamos el payload del webhook en una variable
-                    GITHUB_PAYLOAD = env // Aquí el payload podría estar en una variable de entorno
-                    // Si se quiere ver el payload completo, se puede imprimir o procesar
-                    echo "Evento de Push recibido: ${GITHUB_PAYLOAD}"
+                    sh """
+                    docker build -t ${IMAGE_NAME} .
+                    """
                 }
             }
         }
 
-        stage('Print Push Event') {
+        stage('Run Container') {
             steps {
-                // Imprimir el contenido del evento push
                 script {
-                    // Convertir el payload a una representación legible si es necesario
-                    echo "Contenido del evento Push recibido desde GitHub: ${GITHUB_PAYLOAD}"
+                    def deployConfig = """
+                    {
+                        "Name": "${CONTAINER_NAME}",
+                        "Env": [],
+                        "EndpointId": 6, 
+                        "Config": {
+                            "Image": "${IMAGE_NAME}",
+                            "RestartPolicy": {
+                                "Name": "always"
+                            },
+                            "ExposedPorts": {
+                                "80/tcp": {}
+                            },
+                            "HostConfig": {
+                                "PortBindings": {
+                                    "80/tcp": [
+                                        {
+                                            "HostPort": "80"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                    """
+                    httpRequest(
+                        url: "${PORTAINER_SERVER_URL}/containers/create?name=${CONTAINER_NAME}",
+                        httpMode: 'POST',
+                        contentType: 'APPLICATION_JSON',
+                        customHeaders: [
+                            [name: 'Authorization', value: "Bearer ${PORTAINER_TOKEN}"]
+                        ],
+                        requestBody: deployConfig,
+                        validResponseCodes: '200:201'
+                    )
+
+                    httpRequest(
+                        url: "${PORTAINER_SERVER_URL}/containers/${CONTAINER_NAME}/start",
+                        httpMode: 'POST',
+                        customHeaders: [
+                            [name: 'Authorization', value: "Bearer ${PORTAINER_TOKEN}"]
+                        ],
+                        validResponseCodes: '200:204'
+                    )
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            // Limpiar cualquier cosa si es necesario
-            echo 'Pipeline completado.'
         }
     }
 }
