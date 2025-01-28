@@ -53,7 +53,7 @@ pipeline {
                         httpMode: 'POST',
                         contentType: 'APPLICATION_JSON',
                         customHeaders: [
-                            [name: 'Authorization', value: "Bearer ${PORTAINER_TOKEN}"]
+                            [name: 'X-API-Key', value: '${PORTAINER_TOKEN}']
                         ],
                         requestBody: deployConfig,
                         validResponseCodes: '200:201'
@@ -63,7 +63,7 @@ pipeline {
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/${CONTAINER_NAME}/start",
                         httpMode: 'POST',
                         customHeaders: [
-                            [name: 'Authorization', value: "Bearer ${PORTAINER_TOKEN}"]
+                            [name: 'X-API-Key', value: '${PORTAINER_TOKEN}']
                         ],
                         validResponseCodes: '200:204'
                     )
