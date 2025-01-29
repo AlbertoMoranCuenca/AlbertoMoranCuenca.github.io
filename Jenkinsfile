@@ -33,11 +33,10 @@ pipeline {
             }
         }
 
-        stage('Run Container') {
+        stage('Deploy to Portainer') {
             steps {
                 script {
-                    def deployConfig = """
-                    {
+                    def deployConfig = """{
                         "Name": "${CONTAINER_NAME}",
                         "Image": "${IMAGE_NAME}",
                         "ExposedPorts": {
@@ -46,38 +45,32 @@ pipeline {
                         "HostConfig": {
                             "PortBindings": {
                                 "80/tcp": [
-                                    {
-                                        "HostPort": "80"
-                                    }
+                                    { "HostPort": "80" }
                                 ]
                             }
                         }
-                    }
-                    """
+                    }"""
 
-                    httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/images/create?fromImage=${IMAGE_NAME}",
-                        httpMode: 'POST',
-                        customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
-                        validResponseCodes: '200:204'
-                    )
-                    httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/create?name=${CONTAINER_NAME}",
+                    // Crear el contenedor en Portainer y capturar la respuesta JSON
+                    def createResponse = httpRequest(
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/v1.41/containers/create?name=${CONTAINER_NAME}",
                         httpMode: 'POST',
                         contentType: 'APPLICATION_JSON',
-                        customHeaders: [
-                            [name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]
-                        ],
+                        customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
                         requestBody: deployConfig,
                         validResponseCodes: '200:201'
                     )
 
+                    // Extraer el ID del contenedor de la respuesta JSON
+                    def containerId = new groovy.json.JsonSlurper().parseText(createResponse.content).Id
+
+                    echo "Container ID: ${containerId}"
+
+                    // Iniciar el contenedor usando el ID en lugar del nombre
                     httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/${CONTAINER_NAME}/start",
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerId}/start",
                         httpMode: 'POST',
-                        customHeaders: [
-                            [name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]
-                        ],
+                        customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
                         validResponseCodes: '200:204'
                     )
                 }
