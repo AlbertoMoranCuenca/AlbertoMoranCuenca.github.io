@@ -86,6 +86,13 @@ pipeline {
                         validResponseCodes: '200:201'
                     )
 
+                    if (createResponse.status == 201) {
+    echo "Container ${CONTAINER_NAME} created successfully."
+} else {
+    echo "Failed to create container ${CONTAINER_NAME}. Response: ${createResponse.status}"
+    echo createResponse.content
+}
+
                     def containerId = new groovy.json.JsonSlurper().parseText(createResponse.content).Id
                     
                     echo "Container ID: ${containerId}"
