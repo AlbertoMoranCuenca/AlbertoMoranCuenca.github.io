@@ -1,9 +1,15 @@
+@NonCPS
+def parseContainerInfo(String jsonResponse) {
+    def jsonSlurper = new groovy.json.JsonSlurper()
+    return jsonSlurper.parseText(jsonResponse)
+}
+
 pipeline {
     agent { label 'prod' }
 
     environment {
         PORTAINER_SERVER_URL = "${env.PORTAINER_SERVER_URL}"
-        PORTAINER_TOKEN = credentials('PORTAINER_TOKEN') // Aquí no se hace interpolación
+        PORTAINER_TOKEN = credentials('PORTAINER_TOKEN') 
         DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDENTIALS')
         CONTAINER_NAME = 'webpage'
         IMAGE_NAME = 'albertomoran/webpage:latest'
@@ -60,7 +66,7 @@ pipeline {
                     )
                     
                     if (checkResponse.status == 200) {
-                        def containerInfo = new groovy.json.JsonSlurper().parseText(checkResponse.content)
+                        def containerInfo = parseContainerInfo(checkResponse.content)
 
                     
                         echo "Removing container ${CONTAINER_NAME}..."
