@@ -33,94 +33,75 @@ pipeline {
             }
         }
 
-        stage('Download Image on Portainer') {
+        stage('Deploy on Portainer') {
             steps {
                 script {
-                    httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/images/create?fromImage=${IMAGE_NAME}",
-                        httpMode: 'POST',
+                    // Check if the container exists and stop/remove if running
+                    def checkResponse = httpRequest(
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/json",
+                        httpMode: 'GET',
                         customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
-                        validResponseCodes: '200:204'
+                        validResponseCodes: '200:404'
                     )
-                }
-            }
-        }
-
-        stage('Create Container on Portainer') {
-    steps {
-        script {
-            
-            def checkResponse = httpRequest(
-                url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/json",
-                httpMode: 'GET',
-                customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
-                validResponseCodes: '200:404'
-            )
-            
-            if (checkResponse.status == 200) {
-                def containerInfo = new groovy.json.JsonSlurper().parseText(checkResponse.content)
-                def containerState = containerInfo.State.Status
-                
-                if (containerState == 'running') {
-                    echo "Container ${CONTAINER_NAME} is running, stopping it..."
-                    httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/stop",
-                        httpMode: 'POST',
-                        customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
-                        validResponseCodes: '200:204'
-                    )
-                }
-                
-                echo "Removing container ${CONTAINER_NAME}..."
-                httpRequest(
-                    url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/remove?force=true",
-                    httpMode: 'POST',
-                    customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
-                    validResponseCodes: '200:204'
-                )
-            }
-            
-            
-            def deployConfig = """{
-                "Name": "${CONTAINER_NAME}",
-                "Image": "${IMAGE_NAME}",
-                "ExposedPorts": {
-                    "80/tcp": {}
-                },
-                "HostConfig": {
-                    "PortBindings": {
-                        "80/tcp": [
-                            { "HostPort": "8080", "HostIp": "0.0.0.0" }
-                        ]
-                    },
-                    "RestartPolicy": {
-                        "Name": "always"
+                    
+                    if (checkResponse.status == 200) {
+                        def containerInfo = new groovy.json.JsonSlurper().parseText(checkResponse.content)
+                        def containerState = containerInfo.State.Status
+                        
+                        if (containerState == 'running') {
+                            echo "Container ${CONTAINER_NAME} is running, stopping it..."
+                            httpRequest(
+                                url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/stop",
+                                httpMode: 'POST',
+                                customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
+                                validResponseCodes: '200:204'
+                            )
+                        }
+                        
+                        echo "Removing container ${CONTAINER_NAME}..."
+                        httpRequest(
+                            url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/remove?force=true",
+                            httpMode: 'POST',
+                            customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
+                            validResponseCodes: '200:204'
+                        )
                     }
-                }
-            }"""
 
-            def createResponse = httpRequest(
-                url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/create?name=${CONTAINER_NAME}",
-                httpMode: 'POST',
-                contentType: 'APPLICATION_JSON',
-                customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
-                requestBody: deployConfig,
-                validResponseCodes: '200:201'
-            )
+                    // Deploy the new container
+                    def deployConfig = """{
+                        "Name": "${CONTAINER_NAME}",
+                        "Image": "${IMAGE_NAME}",
+                        "ExposedPorts": {
+                            "80/tcp": {}
+                        },
+                        "HostConfig": {
+                            "PortBindings": {
+                                "80/tcp": [
+                                    { "HostPort": "8080", "HostIp": "0.0.0.0" }
+                                ]
+                            },
+                            "RestartPolicy": {
+                                "Name": "always"
+                            }
+                        }
+                    }"""
 
-            def containerId = new groovy.json.JsonSlurper().parseText(createResponse.content).Id
-            env.CONTAINER_ID = containerId
-            echo "Container ID: ${containerId}"
-        }
-    }
-}
+                    def createResponse = httpRequest(
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/create?name=${CONTAINER_NAME}",
+                        httpMode: 'POST',
+                        contentType: 'APPLICATION_JSON',
+                        customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
+                        requestBody: deployConfig,
+                        validResponseCodes: '200:201'
+                    )
 
+                    def containerId = new groovy.json.JsonSlurper().parseText(createResponse.content).Id
+                    
+                    echo "Container ID: ${containerId}"
 
-        stage('Run Container on Portainer') {
-            steps {
-                script {
+                    // Start the new container
                     httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${env.CONTAINER_ID}/start",
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerId}/start",
                         httpMode: 'POST',
                         customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
                         validResponseCodes: '200:204'
