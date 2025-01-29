@@ -33,6 +33,14 @@ pipeline {
             }
         }
 
+        stage('Clean docker image') {
+            steps {
+                script {
+                    sh "docker rmi ${IMAGE_NAME}"
+                }
+            }
+        }
+
         stage('Deploy on Portainer') {
             steps {
                 script {
@@ -99,7 +107,7 @@ pipeline {
                     
                     echo "Container ID: ${containerId}"
 
-                    // Start the new container
+                    
                     httpRequest(
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerId}/start",
                         httpMode: 'POST',
