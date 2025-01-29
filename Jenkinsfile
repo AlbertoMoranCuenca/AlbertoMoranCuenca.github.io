@@ -45,8 +45,11 @@ pipeline {
                         "HostConfig": {
                             "PortBindings": {
                                 "80/tcp": [
-                                    { "HostPort": "80" }
+                                    { "HostPort": "8080", "HostIp": "0.0.0.0" }
                                 ]
+                            },
+                            "RestartPolicy": {
+                                "Name": "always"
                             }
                         }
                     }"""
