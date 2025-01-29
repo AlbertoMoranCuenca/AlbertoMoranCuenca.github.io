@@ -36,7 +36,7 @@ pipeline {
         stage('Deploy on Portainer') {
             steps {
                 script {
-                    // Check if the container exists and stop/remove if running
+                    
                     def checkResponse = httpRequest(
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/json",
                         httpMode: 'GET',
@@ -46,21 +46,10 @@ pipeline {
                     
                     if (checkResponse.status == 200) {
                         def containerInfo = new groovy.json.JsonSlurper().parseText(checkResponse.content)
-                        def containerRunning = containerInfo.State.Running
-                        
-                        if (containerRunning == 'true') {
-                            echo "Container ${CONTAINER_NAME} is running, stopping it..."
-                            httpRequest(
-                                url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/stop",
-                                httpMode: 'POST',
-                                customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
-                                validResponseCodes: '200:204'
-                            )
-                        }
-                        
+                    
                         echo "Removing container ${CONTAINER_NAME}..."
                         httpRequest(
-                            url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerInfo.Id}",
+                            url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerInfo.Id}?force=true",
                             httpMode: 'DELETE',
                             customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"],[
                                 name: 'force', value: "true"
