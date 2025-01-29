@@ -86,7 +86,7 @@ pipeline {
                         validResponseCodes: '200:201'
                     )
 
-                    if (createResponse.status == 201) {
+                    if (createResponse.status == 200) {
     echo "Container ${CONTAINER_NAME} created successfully."
 } else {
     echo "Failed to create container ${CONTAINER_NAME}. Response: ${createResponse.status}"
