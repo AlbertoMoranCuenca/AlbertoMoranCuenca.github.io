@@ -66,12 +66,12 @@ pipeline {
                     )
                     
                     if (checkResponse.status == 200) {
-                        def containerInfo = parseContainerInfo(checkResponse.content)
+                        def oldContainerId = new groovy.json.JsonSlurper().parseText(checkResponse.content).Id
 
                     
                         echo "Removing container ${CONTAINER_NAME}..."
                         httpRequest(
-                            url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerInfo.Id}?force==true",
+                            url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${oldContainerId}?force==true",
                             httpMode: 'DELETE',
                             customHeaders: [[name: 'X-API-Key', value: PORTAINER_TOKEN]],
                             validResponseCodes: '200:204'
