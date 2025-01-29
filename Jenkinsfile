@@ -36,7 +36,14 @@ pipeline {
         stage('Deploy on Portainer') {
             steps {
                 script {
-                    // Enviar la solicitud sin interpolación de la variable PORTAINER_TOKEN
+                    httpRequest(
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/images/create?fromImage=${IMAGE_NAME}",
+                        httpMode: 'POST',
+                        customHeaders: [[name: 'X-API-Key', value: PORTAINER_TOKEN]],
+                        validResponseCodes: '200:204'
+                    )
+
+                    
                     def checkResponse = httpRequest(
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/json",
                         httpMode: 'GET',
@@ -56,7 +63,7 @@ pipeline {
                         )
                     }
 
-                    // Deploy the new container
+                    
                     def deployConfig = """
                     {
                         "Name": "${CONTAINER_NAME}",
@@ -86,12 +93,7 @@ pipeline {
                         validResponseCodes: '200:201'
                     )
 
-                    if (createResponse.status == 200) {
-    echo "Container ${CONTAINER_NAME} created successfully."
-} else {
-    echo "Failed to create container ${CONTAINER_NAME}. Response: ${createResponse.status}"
-    echo createResponse.content
-}
+                    
 
                     def containerId = new groovy.json.JsonSlurper().parseText(createResponse.content).Id
                     
