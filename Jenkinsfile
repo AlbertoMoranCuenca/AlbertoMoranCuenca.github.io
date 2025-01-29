@@ -60,9 +60,11 @@ pipeline {
                         
                         echo "Removing container ${CONTAINER_NAME}..."
                         httpRequest(
-                            url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/remove?force=true",
-                            httpMode: 'POST',
-                            customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
+                            url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerInfo.Id}",
+                            httpMode: 'DELETE',
+                            customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"],[
+                                name: 'force', value: "true"
+                            ]],
                             validResponseCodes: '200:204'
                         )
                     }
