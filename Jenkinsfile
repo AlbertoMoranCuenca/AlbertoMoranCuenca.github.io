@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PORTAINER_SERVER_URL = "${env.PORTAINER_SERVER_URL}"
-        PORTAINER_TOKEN = credentials('PORTAINER_TOKEN')
+        PORTAINER_TOKEN = credentials('PORTAINER_TOKEN') // Aquí no se hace interpolación
         DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDENTIALS')
         CONTAINER_NAME = 'webpage'
         IMAGE_NAME = 'albertomoran/webpage:latest'
@@ -36,11 +36,11 @@ pipeline {
         stage('Deploy on Portainer') {
             steps {
                 script {
-                    
+                    // Enviar la solicitud sin interpolación de la variable PORTAINER_TOKEN
                     def checkResponse = httpRequest(
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/json",
                         httpMode: 'GET',
-                        customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
+                        customHeaders: [[name: 'X-API-Key', value: PORTAINER_TOKEN]],
                         validResponseCodes: '200:404'
                     )
                     
@@ -51,13 +51,14 @@ pipeline {
                         httpRequest(
                             url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerInfo.Id}?force=true",
                             httpMode: 'DELETE',
-                            customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
+                            customHeaders: [[name: 'X-API-Key', value: PORTAINER_TOKEN]],
                             validResponseCodes: '200:204'
                         )
                     }
 
                     // Deploy the new container
-                    def deployConfig = """{
+                    def deployConfig = """
+                    {
                         "Name": "${CONTAINER_NAME}",
                         "Image": "${IMAGE_NAME}",
                         "ExposedPorts": {
@@ -73,13 +74,14 @@ pipeline {
                                 "Name": "always"
                             }
                         }
-                    }"""
+                    }
+                    """
 
                     def createResponse = httpRequest(
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/create?name=${CONTAINER_NAME}",
                         httpMode: 'POST',
                         contentType: 'APPLICATION_JSON',
-                        customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
+                        customHeaders: [[name: 'X-API-Key', value: PORTAINER_TOKEN]],
                         requestBody: deployConfig,
                         validResponseCodes: '200:201'
                     )
@@ -92,7 +94,7 @@ pipeline {
                     httpRequest(
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerId}/start",
                         httpMode: 'POST',
-                        customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
+                        customHeaders: [[name: 'X-API-Key', value: PORTAINER_TOKEN]],
                         validResponseCodes: '200:204'
                     )
                 }
