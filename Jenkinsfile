@@ -51,9 +51,7 @@ pipeline {
                         httpRequest(
                             url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${containerInfo.Id}?force=true",
                             httpMode: 'DELETE',
-                            customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"],[
-                                name: 'force', value: "true"
-                            ]],
+                            customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
                             validResponseCodes: '200:204'
                         )
                     }
