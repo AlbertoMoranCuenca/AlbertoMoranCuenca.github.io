@@ -46,9 +46,9 @@ pipeline {
                     
                     if (checkResponse.status == 200) {
                         def containerInfo = new groovy.json.JsonSlurper().parseText(checkResponse.content)
-                        def containerState = containerInfo.State.Status
+                        def containerRunning = containerInfo.State.Running
                         
-                        if (containerState == 'running') {
+                        if (containerRunning == 'true') {
                             echo "Container ${CONTAINER_NAME} is running, stopping it..."
                             httpRequest(
                                 url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/stop",
