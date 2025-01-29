@@ -60,7 +60,8 @@ pipeline {
                     )
                     
                     if (checkResponse.status == 200) {
-                        def containerInfo = new groovy.json.JsonSlurper().parseText(checkResponse.content)
+                        def containerInfo = new groovy.json.JsonSlurper().parseText(checkResponse.content) as Map
+
                     
                         echo "Removing container ${CONTAINER_NAME}..."
                         httpRequest(
