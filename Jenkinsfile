@@ -1,9 +1,3 @@
-@NonCPS
-def parseContainerInfo(String jsonResponse) {
-    def jsonSlurper = new groovy.json.JsonSlurper()
-    return jsonSlurper.parseText(jsonResponse)
-}
-
 pipeline {
     agent { label 'prod' }
 
