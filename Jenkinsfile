@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'prod' }  
+    agent { label 'prod' }
 
     environment {
         PORTAINER_SERVER_URL = "${env.PORTAINER_SERVER_URL}"
@@ -11,7 +11,7 @@ pipeline {
     }
 
     stages {
-        stage('Build docker image'){
+        stage('Build docker image') {
             steps {
                 script {
                     sh """
@@ -54,8 +54,15 @@ pipeline {
                         }
                     }
                     """
+
                     httpRequest(
-                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/v1.41/containers/create?name=${CONTAINER_NAME}",
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/images/create?fromImage=${IMAGE_NAME}",
+                        httpMode: 'POST',
+                        customHeaders: [[name: 'X-API-Key', value: "${PORTAINER_TOKEN}"]],
+                        validResponseCodes: '200:204'
+                    )
+                    httpRequest(
+                        url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/create?name=${CONTAINER_NAME}",
                         httpMode: 'POST',
                         contentType: 'APPLICATION_JSON',
                         customHeaders: [
