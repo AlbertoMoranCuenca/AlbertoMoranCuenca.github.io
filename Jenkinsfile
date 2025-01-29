@@ -4,8 +4,9 @@ pipeline {
     environment {
         PORTAINER_SERVER_URL = "${env.PORTAINER_SERVER_URL}"
         PORTAINER_TOKEN = credentials('PORTAINER_TOKEN')
-        CONTAINER_NAME = 'albertomoran-webpage'
-        IMAGE_NAME = 'albertomoran-webpage:latest'
+        DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDENTIALS')
+        CONTAINER_NAME = 'webpage'
+        IMAGE_NAME = 'albertomoran/webpage:latest'
         ENVIRONMENT_ID = '6'
     }
 
@@ -15,6 +16,18 @@ pipeline {
                 script {
                     sh """
                     docker build -t ${IMAGE_NAME} .
+                    """
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    sh """
+                    echo "${DOCKERHUB_CREDENTIALS_PSW}" | docker login -u "${DOCKERHUB_CREDENTIALS_USR}" --password-stdin
+                    docker push ${IMAGE_NAME}
+                    docker logout
                     """
                 }
             }
