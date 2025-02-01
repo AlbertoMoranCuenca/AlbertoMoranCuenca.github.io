@@ -48,7 +48,10 @@ pipeline {
                     httpRequest(
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/images/create?fromImage=${IMAGE_NAME}",
                         httpMode: 'POST',
-                        customHeaders: [[name: 'X-API-Key', value: PORTAINER_TOKEN]],
+                        customHeaders: [
+                            [name: 'X-API-Key', value: PORTAINER_TOKEN],
+                            [name: 'X-Registry-Auth', value: 'eyJyZWdpc3RyeUlkIjoyfQ==']
+                        ],
                         validResponseCodes: '200:204'
                     )
                     echo "Image ${IMAGE_NAME} pulled on Portainer successfully."
@@ -63,7 +66,9 @@ pipeline {
                     def checkResponse = httpRequest(
                         url: "${PORTAINER_SERVER_URL}/endpoints/${ENVIRONMENT_ID}/docker/containers/${CONTAINER_NAME}/json",
                         httpMode: 'GET',
-                        customHeaders: [[name: 'X-API-Key', value: PORTAINER_TOKEN]],
+                        customHeaders: [
+                            [name: 'X-API-Key', value: PORTAINER_TOKEN]
+                        ],
                         validResponseCodes: '200:404'
                     )
 
